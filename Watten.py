@@ -41,6 +41,17 @@ class Watten:
                 player.addCard(self.deck.take(0))
             player.writeOutput(f"Karten: {player.listCards()}")
 
+        self.players[self.turn + 1].stdin.writeline("bube")
+        self.players[self.turn].stdin.writeline("eichel")
+
+        # Trumpf und Farbe ansagen
+        self.players[self.turn + 1].writeOutput("Gewünschter Schlag ist: ")
+        schlag = self.players[self.turn + 1].awaitInput(lambda inp: Value[inp.strip().upper()])
+        print(schlag)
+        self.players[self.turn].writeOutput("Gewünschte Farbe ist: ")
+        farbe = self.players[self.turn].awaitInput(lambda inp: Color[inp.strip().upper()])
+        print(farbe)
+
 
 watten = Watten(False)
 watten.startRound()

@@ -78,10 +78,20 @@ class Player:
         """sends the player a message"""
         self.stdout.writeline(message)
 
-    def readInput(self, length: int):
+    def readInput(self, length: int = -1) -> str:
         """reads wether there has been a textinput"""
-        return self.stdin.read(length)
+        return self.stdin.readline(length)
 
+    def awaitInput(self, validation) -> str:
+        """Reads the user input until validation returns something"""
+        while True:
+            try:
+                text = self.readInput()
+                if len(text) > 0:
+                    return validation(text)
+            except:
+                self.writeOutput("Invalid Input")
+                continue
 
 class Deck:
 
