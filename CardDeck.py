@@ -25,6 +25,26 @@ class Color(Enum):
     HERZ = 2
     BLATT = 3
 
+    def __gt__(self, other):
+        if not isinstance(other, Color):
+            raise ValueError
+        return self.value > other.value
+
+    def __lt__(self, other):
+        if not isinstance(other, Color):
+            raise ValueError
+        return self.value < other.value
+
+    def __eq__(self, other):
+        if not isinstance(other, Color):
+            raise ValueError
+        return self.value == other.value
+
+    def __ne__(self, other):
+        if not isinstance(other, Color):
+            raise ValueError
+        return self.value != other.value
+
 
 class Value(Enum):
     SIX = 6
@@ -36,6 +56,26 @@ class Value(Enum):
     DAME = 12
     KÖNIG = 13
     ASS = 14
+
+    def __gt__(self, other):
+        if not isinstance(other, Value):
+            raise ValueError
+        return self.value > other.value
+
+    def __lt__(self, other):
+        if not isinstance(other, Value):
+            raise ValueError
+        return self.value < other.value
+
+    def __eq__(self, other):
+        if not isinstance(other, Value):
+            raise ValueError
+        return self.value == other.value
+
+    def __ne__(self, other):
+        if not isinstance(other, Value):
+            raise ValueError
+        return self.value != other.value
 
 
 class Card:
@@ -52,10 +92,21 @@ class Card:
     def __repr__(self) -> str:
         return f"[{self.color}, {self.value}]"
 
+    def getColor(self):
+        return self.color
+
+    def getValue(self):
+        return self.value
+
+    def __eq__(self, other):
+        if not isinstance(other, Card):
+            raise ValueError
+        return self.value == other.value and self.color == other.color
+
 
 class Player:
 
-    cards: List[Card] = []
+    cards: List[Card]
     name: str
     stdout: StringBuffer
     stdin: StringBuffer
@@ -64,6 +115,7 @@ class Player:
         self.name = name
         self.stdout = StringBuffer()
         self.stdin = StringBuffer()
+        self.cards = []
 
     def addCard(self, card: Card):
         self.cards.append(card)
@@ -92,6 +144,7 @@ class Player:
             except:
                 self.writeOutput("Invalid Input")
                 continue
+
 
 class Deck:
 
