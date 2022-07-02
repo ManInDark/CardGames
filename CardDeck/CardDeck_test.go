@@ -1,0 +1,140 @@
+package CardDeck
+
+import (
+	"fmt"
+	"testing"
+)
+
+func TestColorString(t *testing.T) {
+	if !(EICHEL.String() == "Eichel") {
+		t.Fatal("String function of Color not working properly")
+	}
+	if !(HERZ.String() == "Herz") {
+		t.Fatal("String function of Color not working properly")
+	}
+	if !(SCHELLE.String() == "Schelle") {
+		t.Fatal("String function of Color not working properly")
+	}
+	if !(BLATT.String() == "Blatt") {
+		t.Fatal("String function of Color not working properly")
+	}
+}
+
+func TestValueString(t *testing.T) {
+	if !(NINE.String() == "Neun") {
+		t.Fatal("String function of Value not working properly")
+	}
+	if !(SIX.String() == "Sechs") {
+		t.Fatal("String function of Value not working properly")
+	}
+	if !(BUBE.String() == "Bube") {
+		t.Fatal("String function of Value not working properly")
+	}
+	if !(ASS.String() == "Ass") {
+		t.Fatal("String function of Value not working properly")
+	}
+	// Assume that everything works then
+}
+
+func TestCardCreation(t *testing.T) {
+	card := Card{EICHEL, SIX}
+	if !(card.color == EICHEL && card.value == SIX) {
+		t.Fatal("Card creation not working")
+	}
+}
+
+func TestGetColor(t *testing.T) {
+	card := Card{EICHEL, TEN}
+	if !(card.GetColor() == EICHEL) {
+		t.Fatal("Card GetColor not working")
+	}
+}
+func TestGetValue(t *testing.T) {
+	card := Card{EICHEL, TEN}
+	if !(card.GetValue() == TEN) {
+		t.Fatal("Card GetValue not working")
+	}
+}
+
+func TestCardString(t *testing.T) {
+	if !(Card{SCHELLE, EIGHT}.String() == "[Schelle Acht]") {
+		t.Fatal("Card String not working")
+	}
+}
+
+func TestCardListString(t *testing.T) {
+	if !(ListToString([]Card{{HERZ, SEVEN}, {EICHEL, TEN}}) == "[[Herz Sieben], [Eichel Zehn]]") {
+		t.Fatal("Card ListToString not working")
+	}
+}
+
+func TestPlayerCreation(t *testing.T) {
+	player := CreatePlayer("somename")
+	if !(player.name == "somename") {
+		t.Fatal("Player CreatePlayer not working")
+	}
+}
+func TestPlayerAddGetCard(t *testing.T) {
+	player := CreatePlayer("somename")
+	player.AddCard(Card{EICHEL, DAME})
+	if !(player.GetCard(0) == Card{EICHEL, DAME}) {
+		t.Fatal("Player AddGetCard not working")
+	}
+}
+
+func TestPlayerString(t *testing.T) {
+	player := CreatePlayer("somename")
+	player.AddCard(Card{EICHEL, DAME})
+	if !(player.String() == "somename: [[Eichel Dame]]") {
+		t.Fatal("Player String not working")
+	}
+}
+
+func TestPlayerListCards(t *testing.T) {
+	player := CreatePlayer("somename")
+	player.AddCard(Card{EICHEL, DAME})
+	if !(len(player.ListCards()) == 1 && player.ListCards()[0] == Card{EICHEL, DAME}) {
+		t.Fatal("Player ListCards not working")
+	}
+}
+
+func TestDeckCreate(t *testing.T) {
+	deck := CreateDeck(SIX)
+	if !(len(deck.cards) == 32) {
+		t.Fatal("Deck Length not working")
+	}
+}
+
+func TestDeckLift(t *testing.T) {
+	deck := CreateDeck(SIX, SEVEN, EIGHT, NINE, TEN, BUBE, DAME)
+	deck.Lift(2)
+	compare_deck := []Card{{HERZ, KÖNIG}, {BLATT, KÖNIG}, {EICHEL, ASS}, {SCHELLE, ASS},
+		{HERZ, ASS}, {BLATT, ASS}, {EICHEL, KÖNIG}, {SCHELLE, KÖNIG}}
+	for n, card := range deck.cards {
+		if card != compare_deck[n] {
+			t.Fatal("Deck Lift not working")
+		}
+	}
+	fmt.Println(deck.cards)
+}
+
+func TestDeckPeek(t *testing.T) {
+	deck := CreateDeck(SIX, SEVEN, EIGHT, NINE, TEN, BUBE, DAME, KÖNIG)
+	if !(deck.Peek(-1) == Card{BLATT, ASS}) {
+		t.Fatal("Deck Peek not working")
+	}
+}
+
+func TestDeckTake(t *testing.T) {
+	deck := CreateDeck(SIX, SEVEN, EIGHT, NINE, TEN, BUBE, DAME, KÖNIG)
+	if !(deck.Take(-1) == Card{BLATT, ASS}) {
+		t.Fatal("Deck Peek not working")
+	}
+}
+
+func TestDeckString(t *testing.T) {
+	deck := CreateDeck(SIX, SEVEN, EIGHT, NINE, TEN, BUBE, DAME, KÖNIG)
+	if !(deck.String() == "[[Eichel Ass], [Schelle Ass], [Herz Ass], [Blatt Ass]]") {
+		t.Fatal("Deck String not working")
+	}
+}
