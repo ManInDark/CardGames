@@ -38,7 +38,7 @@ func TestValueString(t *testing.T) {
 
 func TestCardCreation(t *testing.T) {
 	card := Card{EICHEL, SIX}
-	if !(card.color == EICHEL && card.value == SIX) {
+	if !(card.color == EICHEL && card.value == SIX && card == CreateCard(EICHEL, SIX)) {
 		t.Fatal("Card creation not working")
 	}
 }

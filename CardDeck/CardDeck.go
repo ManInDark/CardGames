@@ -69,6 +69,10 @@ type Card struct {
 	value Value
 }
 
+func CreateCard(color Color, value Value) Card {
+	return Card{color, value}
+}
+
 func (card Card) GetColor() Color {
 	return card.color
 }
