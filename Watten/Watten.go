@@ -1,4 +1,4 @@
-package main
+package Watten
 
 import (
 	"CardGames/CardDeck"
@@ -78,7 +78,7 @@ func findWinner(cards []CardDeck.Card, haube CardDeck.Card) int {
 			temp_card = IntCard{n, card}
 		}
 	}
-	if temp_card.card.GetValue() != CardDeck.SIX {
+	if temp_card.card.GetValue().String() != "" {
 		return temp_card.n
 	}
 	// Erste Farbe
@@ -178,37 +178,4 @@ func (watten *Watten) RunRound() {
 	watten.writeOutputAll("Endgültiger Punktestand: " + strconv.Itoa(punktestand[0]) + ":" + strconv.Itoa(punktestand[1]))
 	watten.Turn += 1
 	watten.Turn %= len(watten.Players)
-}
-
-func main() {
-	watten := CreateWatten(false)
-	go func() {
-		for {
-			msg := <-watten.Players[0].Stdout
-			fmt.Println("Player 0:", msg)
-		}
-	}()
-	go func() {
-		watten.Players[0].Stdin <- "eichel"
-		watten.Players[0].Stdin <- "0"
-		watten.Players[0].Stdin <- "0"
-		watten.Players[0].Stdin <- "0"
-		watten.Players[0].Stdin <- "0"
-		watten.Players[0].Stdin <- "0"
-	}()
-	go func() {
-		for {
-			msg := <-watten.Players[1].Stdout
-			fmt.Println("Player 1:", msg)
-		}
-	}()
-	go func() {
-		watten.Players[1].Stdin <- "acht"
-		watten.Players[1].Stdin <- "0"
-		watten.Players[1].Stdin <- "0"
-		watten.Players[1].Stdin <- "0"
-		watten.Players[1].Stdin <- "0"
-		watten.Players[1].Stdin <- "0"
-	}()
-	watten.RunRound()
 }

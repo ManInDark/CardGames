@@ -1,7 +1,6 @@
 package CardDeck
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -115,7 +114,6 @@ func TestDeckLift(t *testing.T) {
 			t.Fatal("Deck Lift not working")
 		}
 	}
-	fmt.Println(deck.cards)
 }
 
 func TestDeckPeek(t *testing.T) {
