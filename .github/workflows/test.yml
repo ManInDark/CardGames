@@ -8,8 +8,12 @@ jobs:
   Test_CardDeck:
     runs-on: ubuntu-latest
     steps:
-      - run: cd CardDeck; go test
+      - name: Checkout
+        uses: actions/checkout@v3
+      - run: cd CardDeck; /opt/hostedtoolcache/go/1.18.3/x64/bin/go test
   Test_Watten:
     runs-on: ubuntu-latest
     steps:
-      - run: cd Watten; go test
+      - name: Checkout
+        uses: actions/checkout@v3
+      - run: cd Watten; /opt/hostedtoolcache/go/1.18.3/x64/bin/go test
