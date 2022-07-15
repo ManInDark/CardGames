@@ -1,0 +1,15 @@
+name: Run Tests
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  Test_CardDeck:
+    runs-on: ubuntu-latest
+    steps:
+      - run: cd CardDeck; go test
+  Test_Watten:
+    runs-on: ubuntu-latest
+    steps:
+      - run: cd Watten; go test
