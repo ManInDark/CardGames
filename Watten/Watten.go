@@ -150,7 +150,7 @@ func (watten *Watten) RunRound() {
 
 	// Spielrunden
 	punktestand := []int{0, 0}
-	beginner := watten.Turn
+	beginner := watten.Turn + 1
 	haube := CardDeck.CreateCard(color, value)
 
 	for n := 0; n < 5; n++ {
@@ -158,11 +158,16 @@ func (watten *Watten) RunRound() {
 
 		// jeweils die gelegten Karten auswählen
 		for i := 0; i < len(watten.Players); i++ {
-			watten.Players[(watten.Turn+i)%len(watten.Players)].Stdout <- "Zu legende Karte:"
+			player := watten.Players[(watten.Turn+i+beginner)%len(watten.Players)]
+			player.Stdout <- "Zu legende Karte:"
 			for {
-				number, err := strconv.Atoi(strings.Trim(<-watten.Players[(watten.Turn+i)%len(watten.Players)].Stdin, " \t\n\r"))
+				number, err := strconv.Atoi(strings.Trim(<-player.Stdin, " \t\n\r"))
+				if number >= len(player.ListCards()) {
+					player.Stdout <- "Invalide Karte"
+					continue
+				}
 				if err == nil {
-					gelegte_karten = append(gelegte_karten, watten.Players[(watten.Turn+i)%len(watten.Players)].GetCard(int8(number)))
+					gelegte_karten = append(gelegte_karten, player.GetCard(int8(number)))
 					watten.writeOutputAll(gelegte_karten[i].String())
 					break
 				}
