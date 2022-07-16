@@ -18,8 +18,8 @@ func TestKritische(t *testing.T) {
 }
 
 func TestCreateWatten(t *testing.T) {
-	watten := CreateWatten(false)
-	if len(watten.Players) != 2 {
+	watten := CreateWatten(true, true)
+	if len(watten.Players) != 4 {
 		t.Fatal("CreateWatten function not working properly")
 	} else if watten.Turn != 0 {
 		t.Fatal("CreateWatten function not working properly")
@@ -73,7 +73,7 @@ func TestFindWinner(t *testing.T) {
 	}
 }
 func TestWhole(t *testing.T) {
-	watten := CreateWatten(false)
+	watten := CreateWatten(false, true)
 	go func() {
 		for {
 			msg := <-watten.Players[0].Stdout
@@ -81,6 +81,7 @@ func TestWhole(t *testing.T) {
 		}
 	}()
 	go func() {
+		watten.Players[0].Stdin <- "apfelsaft"
 		watten.Players[0].Stdin <- "eichel"
 		watten.Players[0].Stdin <- "0"
 		watten.Players[0].Stdin <- "0"
@@ -95,6 +96,7 @@ func TestWhole(t *testing.T) {
 		}
 	}()
 	go func() {
+		watten.Players[1].Stdin <- "braten"
 		watten.Players[1].Stdin <- "acht"
 		watten.Players[1].Stdin <- "0"
 		watten.Players[1].Stdin <- "0"

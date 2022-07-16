@@ -2,7 +2,6 @@ package Watten
 
 import (
 	"CardGames/CardDeck"
-	"fmt"
 	"strconv"
 	"strings"
 )
@@ -32,15 +31,17 @@ func (watten *Watten) writeOutputAll(message string) {
 	}
 }
 
-func CreateWatten(large bool) Watten {
+func CreateWatten(large bool, with_players bool) Watten {
 	watten := Watten{0, CardDeck.CreateDeck(CardDeck.SIX), []*CardDeck.Player{}, false}
 	playercount := DEFAULT_SIZE
-	if large {
-		playercount *= 2
-	}
-	for n := 0; n < playercount; n++ {
-		player := (CardDeck.CreatePlayer(string(rune(n))))
-		watten.Players = append(watten.Players, &player)
+	if with_players {
+		if large {
+			playercount *= 2
+		}
+		for n := 0; n < playercount; n++ {
+			player := (CardDeck.CreatePlayer(string(rune(n))))
+			watten.Players = append(watten.Players, &player)
+		}
 	}
 	return watten
 }
@@ -94,10 +95,11 @@ func findWinner(cards []CardDeck.Card, haube CardDeck.Card) int {
 func (watten *Watten) RunRound() {
 	watten.Deck.Shuffle()
 	watten.Deck.Lift()
+	watten.writeOutputAll("Die Runde hat begonnen")
 
 	// Abgehobene Karte ansehen
 	abgehobene := watten.Deck.Peek(-1)
-	watten.Players[(watten.Turn+3)%len(watten.Players)].Stdout <- abgehobene.String()
+	watten.Players[(watten.Turn+3)%len(watten.Players)].Stdout <- "Abgehobene Karte: " + abgehobene.String()
 	for _, kritischer := range kritische() {
 		if abgehobene == kritischer {
 			watten.Players[(watten.Turn+3)%len(watten.Players)].Stdout <- "Karte genommen"
@@ -116,10 +118,6 @@ func (watten *Watten) RunRound() {
 		for n := 0; n < 2; n++ {
 			player.AddCard(watten.Deck.Take(0))
 		}
-	}
-
-	for _, player := range watten.Players {
-		fmt.Println(player.ListCards())
 	}
 
 	// Schlag und Farbe ansagen
