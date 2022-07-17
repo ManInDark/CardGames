@@ -63,7 +63,7 @@ func TestFindWinner(t *testing.T) {
 	}
 	winner := findWinner([]CardDeck.Card{ // Erste Farbe
 		CardDeck.CreateCard(CardDeck.HERZ, CardDeck.TEN),
-		CardDeck.CreateCard(CardDeck.HERZ, CardDeck.BUBE),
+		CardDeck.CreateCard(CardDeck.HERZ, CardDeck.UNTER),
 		CardDeck.CreateCard(CardDeck.HERZ, CardDeck.SEVEN),
 		CardDeck.CreateCard(CardDeck.HERZ, CardDeck.ASS)},
 		CardDeck.CreateCard(CardDeck.BLATT, CardDeck.NINE))

@@ -20,8 +20,8 @@ const (
 	EIGHT Value = 8
 	NINE  Value = 9
 	TEN   Value = 10
-	BUBE  Value = 11
-	DAME  Value = 12
+	UNTER Value = 11
+	OBER  Value = 12
 	KÖNIG Value = 13
 	ASS   Value = 14
 )
@@ -52,10 +52,10 @@ func (value Value) String() string {
 		return "Neun"
 	case TEN:
 		return "Zehn"
-	case BUBE:
-		return "Bube"
-	case DAME:
-		return "Dame"
+	case UNTER:
+		return "Unter"
+	case OBER:
+		return "Ober"
 	case KÖNIG:
 		return "König"
 	case ASS:

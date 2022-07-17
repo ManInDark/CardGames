@@ -26,7 +26,7 @@ func TestValueString(t *testing.T) {
 	if !(SIX.String() == "Sechs") {
 		t.Fatal("String function of Value not working properly")
 	}
-	if !(BUBE.String() == "Bube") {
+	if !(UNTER.String() == "Unter") {
 		t.Fatal("String function of Value not working properly")
 	}
 	if !(ASS.String() == "Ass") {
@@ -75,24 +75,24 @@ func TestPlayerCreation(t *testing.T) {
 }
 func TestPlayerAddGetCard(t *testing.T) {
 	player := CreatePlayer("somename")
-	player.AddCard(Card{EICHEL, DAME})
-	if !(player.GetCard(0) == Card{EICHEL, DAME}) {
+	player.AddCard(Card{EICHEL, OBER})
+	if !(player.GetCard(0) == Card{EICHEL, OBER}) {
 		t.Fatal("Player AddGetCard not working")
 	}
 }
 
 func TestPlayerString(t *testing.T) {
 	player := CreatePlayer("somename")
-	player.AddCard(Card{EICHEL, DAME})
-	if !(player.String() == "somename: [[Eichel Dame]]") {
+	player.AddCard(Card{EICHEL, OBER})
+	if !(player.String() == "somename: [[Eichel Ober]]") {
 		t.Fatal("Player String not working")
 	}
 }
 
 func TestPlayerListCards(t *testing.T) {
 	player := CreatePlayer("somename")
-	player.AddCard(Card{EICHEL, DAME})
-	if !(len(player.ListCards()) == 1 && player.ListCards()[0] == Card{EICHEL, DAME}) {
+	player.AddCard(Card{EICHEL, OBER})
+	if !(len(player.ListCards()) == 1 && player.ListCards()[0] == Card{EICHEL, OBER}) {
 		t.Fatal("Player ListCards not working")
 	}
 }
@@ -105,7 +105,7 @@ func TestDeckCreate(t *testing.T) {
 }
 
 func TestDeckLift(t *testing.T) {
-	deck := CreateDeck(SIX, SEVEN, EIGHT, NINE, TEN, BUBE, DAME)
+	deck := CreateDeck(SIX, SEVEN, EIGHT, NINE, TEN, UNTER, OBER)
 	deck.Lift(2)
 	compare_deck := []Card{{HERZ, KÖNIG}, {BLATT, KÖNIG}, {EICHEL, ASS}, {SCHELLE, ASS},
 		{HERZ, ASS}, {BLATT, ASS}, {EICHEL, KÖNIG}, {SCHELLE, KÖNIG}}
@@ -117,21 +117,21 @@ func TestDeckLift(t *testing.T) {
 }
 
 func TestDeckPeek(t *testing.T) {
-	deck := CreateDeck(SIX, SEVEN, EIGHT, NINE, TEN, BUBE, DAME, KÖNIG)
+	deck := CreateDeck(SIX, SEVEN, EIGHT, NINE, TEN, UNTER, OBER, KÖNIG)
 	if !(deck.Peek(-1) == Card{BLATT, ASS}) {
 		t.Fatal("Deck Peek not working")
 	}
 }
 
 func TestDeckTake(t *testing.T) {
-	deck := CreateDeck(SIX, SEVEN, EIGHT, NINE, TEN, BUBE, DAME, KÖNIG)
+	deck := CreateDeck(SIX, SEVEN, EIGHT, NINE, TEN, UNTER, OBER, KÖNIG)
 	if !(deck.Take(-1) == Card{BLATT, ASS}) {
 		t.Fatal("Deck Peek not working")
 	}
 }
 
 func TestDeckString(t *testing.T) {
-	deck := CreateDeck(SIX, SEVEN, EIGHT, NINE, TEN, BUBE, DAME, KÖNIG)
+	deck := CreateDeck(SIX, SEVEN, EIGHT, NINE, TEN, UNTER, OBER, KÖNIG)
 	if !(deck.String() == "[[Eichel Ass], [Schelle Ass], [Herz Ass], [Blatt Ass]]") {
 		t.Fatal("Deck String not working")
 	}
