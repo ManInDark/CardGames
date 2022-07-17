@@ -80,6 +80,8 @@ func main() {
 	newgame := Watten.CreateWatten(false, false)
 	games = append(games, &newgame)
 
-	http.HandleFunc("/", websocketHandler)
+	http.HandleFunc("/home.html", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "home.html") })
+	http.HandleFunc("/home.js", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "home.js") })
+	http.HandleFunc("/socket", websocketHandler)
 	http.ListenAndServe(":2000", nil)
 }
