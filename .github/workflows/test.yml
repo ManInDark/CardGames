@@ -28,16 +28,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - run: Start-Process -nonewwindow $Env:GOROOT_1_18_X64\bin\go.exe test ./CardDeck 
+      - run: Start-Process -nonewwindow cd CardDeck; $Env:GOROOT_1_18_X64\bin\go.exe test
   Test_Watten_Windows:
     runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - run: Start-Process -nonewwindow '$Env:GOROOT_1_18_X64\bin\go.exe test ./Watten' 
+      - run: Start-Process -nonewwindow cd Watten; '$Env:GOROOT_1_18_X64\bin\go.exe test' 
   Test_WattenServer_Build_Windows:
     runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - run: Start-Process -nonewwindow $Env:GOROOT_1_18_X64\bin\go.exe build ./WattenServer
+      - run: Start-Process -nonewwindow cd WattenServer; $Env:GOROOT_1_18_X64\bin\go.exe build
