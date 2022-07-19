@@ -10,34 +10,34 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - run: cd CardDeck; /opt/hostedtoolcache/go/1.18.3/x64/bin/go test
+      - run: cd CardDeck; /opt/hostedtoolcache/go/1.18.4/x64/bin/go test
   Test_Watten_Ubuntu:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - run: cd Watten; /opt/hostedtoolcache/go/1.18.3/x64/bin/go test
+      - run: cd Watten; /opt/hostedtoolcache/go/1.18.4/x64/bin/go test
   Test_WattenServer_Build_Ubuntu:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - run: cd WattenServer; /opt/hostedtoolcache/go/1.18.3/x64/bin/go bulid
+      - run: cd WattenServer; /opt/hostedtoolcache/go/1.18.4/x64/bin/go bulid
   Test_CardDeck_Windows:
     runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - run: cd CardDeck; $GOROOT_1_18_X64/bin/go test
+      - run: cd CardDeck; $GOROOT_1_18_X64\bin\go test
   Test_Watten_Windows:
     runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - run: cd Watten; $GOROOT_1_18_X64/bin/go test
+      - run: cd Watten; $GOROOT_1_18_X64\bin\go test
   Test_WattenServer_Build_Windows:
     runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - run: cd WattenServer; $GOROOT_1_18_X64/bin/go bulid
+      - run: cd WattenServer; $GOROOT_1_18_X64\bin\go bulid
