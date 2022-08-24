@@ -23,3 +23,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - run: cd WattenServer; /opt/hostedtoolcache/go/1.18.4/x64/bin/go build
+  Test_WattenServer_Build_For_Windows:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - run: cd WattenServer; GOOS=windows GOARCH=amd64 /opt/hostedtoolcache/go/1.18.4/x64/bin/go build
