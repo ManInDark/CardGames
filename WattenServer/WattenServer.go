@@ -55,8 +55,8 @@ func websocketConnector(w *http.ResponseWriter, r *http.Request, game *Watten.Wa
 }
 
 /*
-	Assigns new connections to games and creates new ones if necessary
-	So just sorts where the connections should go, doesn't actually connect anything
+Assigns new connections to games and creates new ones if necessary
+So just sorts where the connections should go, doesn't actually connect anything
 */
 func websocketHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Connection Received")
@@ -82,6 +82,12 @@ func main() {
 
 	http.HandleFunc("/home.html", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "home.html") })
 	http.HandleFunc("/home.js", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "home.js") })
+
+	http.HandleFunc("/blatt.svg", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "svg/blatt.svg") })
+	http.HandleFunc("/eichel.svg", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "svg/eichel.svg") })
+	http.HandleFunc("/herz.svg", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "svg/herz.svg") })
+	http.HandleFunc("/schelle.svg", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "svg/schelle.svg") })
+
 	http.HandleFunc("/socket", websocketHandler)
 	http.ListenAndServe(":2000", nil)
 }
