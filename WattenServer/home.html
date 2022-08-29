@@ -10,8 +10,26 @@
         svg>text::selection {
             background: none;
         }
+        #holder {
+            display: block;
+        }
+        div {
+            height: fit-content;
+            width: fit-content;
+        }
+        div>div {
+            display: inline;
+        }
+        game-card {
+            margin: 4px;
+        }
     </style>
 </head>
 <body>
+    <div style="display: block;">
+        <div id="haube"></div>
+        <div id="cards"></div>
+    </div>
+    <div id="holder"></div>
 </body>
 </html>

@@ -1,19 +1,44 @@
+var state = "initializing";
+var haube = "";
 socket = new WebSocket("ws://" + location.host + "/socket")
 socket.onerror = error => { console.log("Socket Error: ", error) }
 socket.onmessage = message => {
+    if (message.data.startsWith("[[")) { // liest list antwort ein
+        message.data.replace("[[", "").replace("]]", "").split("] [").forEach(card => {
+            split = card.split(" ");
+            document.getElementById("holder").append(createCard(split[1], split[0]));
+        });
+    }
+    else if (message.data.startsWith("[")) {
+        split = message.data.replace("[", "").replace("]", "").split(" ");
+        document.getElementById("cards").append(createCard(split[1].trim(), split[0].trim()))
+    }
+    else if (state === "initializing" && message.data == "Die Runde hat begonnen") { state = "choosing"; list(); haube = ""; }
+    else if (state === "choosing" && message.data.startsWith("Gewünschte")) {
+        state = "selecting:" + (message.data.split(" ")[1] === "Schlag" ? "value" : "color");
+    }
+    else if (state === "choosing" && message.data === "Zu legende Karte:") { state = "playing"; }
+    else if (message.data.startsWith("Gewählte")) {
+        haube += message.data.split(": ")[1] + " "
+        if (haube.split(" ").length > 2) { // Wenn beide gewählt wurden
+            split = haube.split(" ");
+            document.getElementById("haube").append(createCard(split[0], split[1]))
+        }
+    }
+    else if (message.data.startsWith("Gewonnen hat:")) {
+        while (document.getElementById("cards").childElementCount > 0) { document.getElementById("cards").children[0].remove(); }
+    }
     console.log(message.data)
 }
 function send(message) { socket.send(message) }
 function list() { send("list") }
 
 function checkKritter(value, color) {
-    value = value.toUpperCase();
-    color = color.toUpperCase();
-    if (color === "HERZ" && value === "KÖNIG")
+    if (color === "Herz" && value === "König")
         return "GoldenRod";
-    else if (color === "SCHELLE" && value === "SEVEN")
+    else if (color === "Schelle" && value === "Sieben")
         return "silver";
-    else if (color === "EICHEL" && value === "SEVEN")
+    else if (color === "Eichel" && value === "Sieben")
         return "sienna";
     else
         return "none";
@@ -48,6 +73,7 @@ class GameCard extends HTMLElement {
     }
 
     connectedCallback() {
+        this.addEventListener("click", clickHandler)
         const svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         svgElement.setAttribute("version", "1.0");
         svgElement.setAttribute("width", "100px");
@@ -84,7 +110,7 @@ class GameCard extends HTMLElement {
         value.style.fontFamily = "Arial";
         value.style.fontSize = "4em";
         value.style.textAlign = "center";
-        
+
         svgElement.appendChild(value);
 
         const color = document.createElementNS("http://www.w3.org/2000/svg", "image");
@@ -99,3 +125,24 @@ class GameCard extends HTMLElement {
 }
 
 customElements.define("game-card", GameCard);
+
+function createCard(value, color) {
+    const newCard = document.createElement("game-card");
+    newCard.setAttribute("value", value.trim());
+    newCard.setAttribute("color", color.trim());
+    return newCard;
+}
+
+function clickHandler() {
+    if (state.startsWith("selecting")) { send(this.getAttribute(state.split(":")[1])); state = "choosing"; }
+    if (state === "playing") {
+        for (i = 0; i < this.parentElement.childElementCount; i++) {
+            if (this.parentElement.children[i] === this) {
+                send(i);
+                state = "choosing";
+                this.remove();
+                break;
+            }
+        }
+    }
+}
