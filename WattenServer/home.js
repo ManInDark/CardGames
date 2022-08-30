@@ -16,6 +16,7 @@ socket.onmessage = message => {
     else if (state === "initializing" && message.data == "Die Runde hat begonnen") { state = "choosing"; list(); haube = ""; }
     else if (state === "choosing" && message.data.startsWith("Gewünschte")) {
         state = "selecting:" + (message.data.split(" ")[1] === "Schlag" ? "value" : "color");
+        alert("Wähle " + message.data.split(" ")[1] + " aus");
     }
     else if (state === "choosing" && message.data === "Zu legende Karte:") { state = "playing"; }
     else if (message.data.startsWith("Gewählte")) {
@@ -41,7 +42,7 @@ function checkKritter(value, color) {
     else if (color === "Eichel" && value === "Sieben")
         return "sienna";
     else
-        return "none";
+        return "white";
 }
 
 function translateValue(value) {

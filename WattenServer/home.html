@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,26 +11,36 @@
         svg>text::selection {
             background: none;
         }
-        #holder {
+
+        body>div {
             display: block;
+            width: 540px;
+            height: 208px;
+            margin: auto;
         }
-        div {
-            height: fit-content;
-            width: fit-content;
-        }
-        div>div {
+
+        div#haube,
+        div#cards {
             display: inline;
+            height: 208px;
         }
+
         game-card {
             margin: 4px;
         }
+
+        body {
+            background-color: rgb(236, 192, 116);
+        }
     </style>
 </head>
+
 <body>
-    <div style="display: block;">
-        <div id="haube"></div>
-        <div id="cards"></div>
+    <div>
+        <div id="haube" style="width: 108px;"></div>
+        <div id="cards" style="width: 432px;"></div>
     </div>
     <div id="holder"></div>
 </body>
+
 </html>
