@@ -1,7 +1,7 @@
 var state = "initializing";
 var haube = "";
-socket = new WebSocket("ws://" + location.host + "/socket")
-socket.onerror = error => { console.log("Socket Error: ", error) }
+socket = new WebSocket("ws"+ location.protocol.replace("http", "") + "//" + location.host + "/socket");
+socket.onerror = error => { console.log("Socket Error: ", error); }
 socket.onmessage = message => {
     if (message.data.startsWith("[[")) { // liest list antwort ein
         message.data.replace("[[", "").replace("]]", "").split("] [").forEach(card => {
@@ -11,25 +11,29 @@ socket.onmessage = message => {
     }
     else if (message.data.startsWith("[")) {
         split = message.data.replace("[", "").replace("]", "").split(" ");
-        document.getElementById("cards").append(createCard(split[1].trim(), split[0].trim()))
+        document.getElementById("cards").append(createCard(split[1].trim(), split[0].trim()));
     }
     else if (state === "initializing" && message.data == "Die Runde hat begonnen") { state = "choosing"; list(); haube = ""; }
     else if (state === "choosing" && message.data.startsWith("Gewünschte")) {
         state = "selecting:" + (message.data.split(" ")[1] === "Schlag" ? "value" : "color");
-        alert("Wähle " + message.data.split(" ")[1] + " aus");
+        createLog("Wähle " + message.data.split(" ")[1] + " aus!");
     }
-    else if (state === "choosing" && message.data === "Zu legende Karte:") { state = "playing"; }
+    else if (state === "choosing" && message.data === "Zu legende Karte:") { state = "playing"; createLog("Du bist dran!") }
     else if (message.data.startsWith("Gewählte")) {
-        haube += message.data.split(": ")[1] + " "
+        createLog(message.data);
+        haube += message.data.split(": ")[1] + " ";
         if (haube.split(" ").length > 2) { // Wenn beide gewählt wurden
             split = haube.split(" ");
-            document.getElementById("haube").append(createCard(split[0], split[1]))
+            document.getElementById("haube").append(createCard(split[0], split[1]));
         }
     }
     else if (message.data.startsWith("Gewonnen hat:")) {
         while (document.getElementById("cards").childElementCount > 0) { document.getElementById("cards").children[0].remove(); }
+    } else {
+        createLog(message.data);
     }
-    console.log(message.data)
+    if (message.data.startsWith("Endgültiger")) { document.getElementById("haube").children[0].remove(); }
+    console.log(message.data);
 }
 function send(message) { socket.send(message) }
 function list() { send("list") }
@@ -135,10 +139,11 @@ function createCard(value, color) {
 }
 
 function clickHandler() {
-    if (state.startsWith("selecting")) { send(this.getAttribute(state.split(":")[1])); state = "choosing"; }
+    if (state.startsWith("selecting")) { removeLastLog(); send(this.getAttribute(state.split(":")[1])); state = "choosing"; }
     if (state === "playing") {
         for (i = 0; i < this.parentElement.childElementCount; i++) {
             if (this.parentElement.children[i] === this) {
+                removeLastLog(); // Removes the log "Du bist dran"
                 send(i);
                 state = "choosing";
                 this.remove();
@@ -146,4 +151,14 @@ function clickHandler() {
             }
         }
     }
+}
+
+function createLog(message) {
+    let logelement = document.createElement("p");
+    logelement.innerText = message;
+    document.getElementById("log").append(logelement);
+}
+
+function removeLastLog () {
+    document.getElementById("log").children[document.getElementById("log").childElementCount - 1].remove();
 }

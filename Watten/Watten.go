@@ -2,6 +2,7 @@ package Watten
 
 import (
 	"CardGames/CardDeck"
+	"fmt"
 	"strconv"
 	"strings"
 )
@@ -26,6 +27,7 @@ type Watten struct {
 }
 
 func (watten *Watten) writeOutputAll(message string) {
+	fmt.Println(message)
 	for _, player := range watten.Players {
 		player.Stdout <- message
 	}
@@ -177,6 +179,7 @@ func (watten *Watten) RunRound() {
 		watten.writeOutputAll("Gewonnen hat: " + gelegte_karten[winner].String())
 		punktestand[(beginner+winner)%len(watten.Players)] += 1
 		beginner = beginner + winner
+		watten.writeOutputAll("Zwischenstand: " + strconv.Itoa(punktestand[0]) + ":" + strconv.Itoa(punktestand[1]))
 	}
 	watten.writeOutputAll("Endgültiger Punktestand: " + strconv.Itoa(punktestand[0]) + ":" + strconv.Itoa(punktestand[1]))
 	watten.Turn += 1

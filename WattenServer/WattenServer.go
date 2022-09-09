@@ -5,6 +5,7 @@ import (
 	"CardGames/Watten"
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/gorilla/websocket"
@@ -59,8 +60,8 @@ Assigns new connections to games and creates new ones if necessary
 So just sorts where the connections should go, doesn't actually connect anything
 */
 func websocketHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Connection Received")
 	selected_game := games[len(games)-1]
+	fmt.Println("Connection Received, now " + strconv.Itoa(len(selected_game.Players)+1) + " Players")
 	if selected_game.Large {
 		if len(selected_game.Players) < 4 {
 			websocketConnector(&w, r, selected_game)
