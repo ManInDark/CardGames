@@ -1,6 +1,7 @@
+var removal_timeout = 1000;
 var state = "initializing";
 var haube = "";
-socket = new WebSocket("ws"+ location.protocol.replace("http", "") + "//" + location.host + "/socket");
+socket = new WebSocket("ws" + location.protocol.replace("http", "") + "//" + location.host + "/socket");
 socket.onerror = error => { console.log("Socket Error: ", error); }
 socket.onmessage = message => {
     if (message.data.startsWith("[[")) { // liest list antwort ein
@@ -28,7 +29,8 @@ socket.onmessage = message => {
         }
     }
     else if (message.data.startsWith("Gewonnen hat:")) {
-        while (document.getElementById("cards").childElementCount > 0) { document.getElementById("cards").children[0].remove(); }
+        for (i = 0; i < document.getElementById("cards").children.length; i++)
+            setTimeout((card) => { card.remove() }, removal_timeout, document.getElementById("cards").children[i])
     } else {
         createLog(message.data);
     }
@@ -153,12 +155,20 @@ function clickHandler() {
     }
 }
 
+/**
+ * creates a log element and appends it to the log 
+ * 
+ * @param {String} message 
+ */
 function createLog(message) {
     let logelement = document.createElement("p");
     logelement.innerText = message;
     document.getElementById("log").append(logelement);
 }
 
-function removeLastLog () {
+/**
+ * removes the last log message
+ */
+function removeLastLog() {
     document.getElementById("log").children[document.getElementById("log").childElementCount - 1].remove();
 }
