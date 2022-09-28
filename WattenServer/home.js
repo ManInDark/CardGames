@@ -34,7 +34,7 @@ socket.onmessage = message => {
     } else {
         createLog(message.data);
     }
-    if (message.data.startsWith("Endgültiger")) { document.getElementById("haube").children[0].remove(); }
+    if (message.data.startsWith("Endgültiger")) { setTimeout(() => { document.getElementById("haube").children[0].remove() }, removal_timeout); }
     console.log(message.data);
 }
 function send(message) { socket.send(message) }
