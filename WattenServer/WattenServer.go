@@ -28,6 +28,7 @@ func websocketConnector(w *http.ResponseWriter, r *http.Request, game *Watten.Wa
 
 	player := CardDeck.CreatePlayer("Player") // TODO player namen irgendwie festlegen
 	game.Players = append(game.Players, &player)
+	fmt.Println("Connection Received, now " + strconv.Itoa(len(game.Players)) + " Players")
 
 	go func(socket *websocket.Conn, player *CardDeck.Player) {
 		for {
@@ -61,7 +62,6 @@ So just sorts where the connections should go, doesn't actually connect anything
 */
 func websocketHandler(w http.ResponseWriter, r *http.Request) {
 	selected_game := games[len(games)-1]
-	fmt.Println("Connection Received, now " + strconv.Itoa(len(selected_game.Players)+1) + " Players")
 	if selected_game.Large {
 		if len(selected_game.Players) < 4 {
 			websocketConnector(&w, r, selected_game)
