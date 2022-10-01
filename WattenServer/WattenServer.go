@@ -81,6 +81,10 @@ func main() {
 	newgame := Watten.CreateWatten(false, false)
 	games = append(games, &newgame)
 
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, "/home.html", http.StatusMovedPermanently)
+	})
+
 	http.HandleFunc("/home.html", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "home.html") })
 	http.HandleFunc("/home.js", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "home.js") })
 
