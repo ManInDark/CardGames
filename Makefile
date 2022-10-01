@@ -15,5 +15,5 @@ build_WattenServer_Windows:
 build_all: build_WattenServer_Linux build_WattenServer_Windows
 
 zip_program: build_all
-	- rm watten.zip
-	zip -j watten.zip WattenServer/bin/WattenServer WattenServer/bin/WattenServer.exe WattenServer/*.js WattenServer/*.html
+	- rm WattenServer/watten.zip
+	cd WattenServer; zip -r watten.zip *.js *.html svg; zip -jr watten.zip bin
