@@ -6,15 +6,25 @@ on:
       - v*
 
 jobs:
-  build:
+  test_beforehand:  
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Test CardDeck
+        run: /opt/hostedtoolcache/go/1.19.1/x64/bin/go test ./CardDeck -cover -v
+      - name: Test Watten
+        run: /opt/hostedtoolcache/go/1.19.1/x64/bin/go test ./Watten -cover -v
+  build:
+    runs-on: ubuntu-latest
+    needs: test_beforehand
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Build for Linux
-        run: go build -o WattenServer/bin/WattenServer ./WattenServer
+        run: /opt/hostedtoolcache/go/1.19.1/x64/bin/go build -o WattenServer/bin/WattenServer ./WattenServer
       - name: Build for Windows
-        run: GOOS=windows GOARCH=amd64 go build -o WattenServer/bin/WattenServer.exe ./WattenServer
+        run: GOOS=windows GOARCH=amd64 /opt/hostedtoolcache/go/1.19.1/x64/bin/go build -o WattenServer/bin/WattenServer.exe ./WattenServer
       - name: ZIP Files
         run: zip -j watten.zip WattenServer/bin/WattenServer WattenServer/bin/WattenServer.exe WattenServer/*.js WattenServer/*.html
       - name: Create Release
