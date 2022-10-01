@@ -1,0 +1,24 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Build for Linux
+        run: go build -o WattenServer/bin/WattenServer ./WattenServer
+      - name: Build for Windows
+        run: GOOS=windows GOARCH=amd64 go build -o WattenServer/bin/WattenServer.exe ./WattenServer
+      - name: ZIP Files
+        run: zip -j watten.zip WattenServer/bin/WattenServer WattenServer/bin/WattenServer.exe WattenServer/*.js WattenServer/*.html
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "watten.zip"
+          token: ${{ secrets.GITHUB_TOKEN }}
