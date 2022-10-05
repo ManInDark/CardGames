@@ -94,6 +94,48 @@ func findWinner(cards []CardDeck.Card, haube CardDeck.Card) int {
 	return temp_card.n
 }
 
+func requestSchlag(player *CardDeck.Player) (CardDeck.Value, bool) {
+	player.Stdout <- "Gewünschter Schlag ist:"
+	for {
+		response := strings.Trim(<-player.Stdin, " \t\n\r")
+		if strings.EqualFold(response, "Schlagwechsel") {
+			return CardDeck.SIX, true
+		}
+		for value := CardDeck.SIX; value <= CardDeck.ASS; value++ {
+			if strings.EqualFold(value.String(), response) {
+				return value, false
+			}
+		}
+		player.Stdout <- "Auswahl nicht erkannt"
+	}
+}
+
+func requestFarbe(player *CardDeck.Player) CardDeck.Color {
+	player.Stdout <- "Gewünschte Farbe ist:"
+	for {
+		response := strings.Trim(<-player.Stdin, " \t\n\r")
+		for color := CardDeck.EICHEL; color <= CardDeck.BLATT; color++ {
+			if strings.EqualFold(color.String(), response) {
+				return color
+			}
+		}
+		player.Stdout <- "Auswahl nicht erkannt"
+	}
+}
+
+func acceptSchlagwechsel(player *CardDeck.Player) bool {
+	player.Stdout <- "Schlagwechsel annehmen?"
+	for {
+		response := strings.Trim(<-player.Stdin, " \t\n\r")
+		if strings.EqualFold(response, "Ja") {
+			return true
+		} else if strings.EqualFold(response, "Nein") {
+			return false
+		}
+		player.Stdout <- "Auswahl nicht erkannt"
+	}
+}
+
 func (watten *Watten) RunRound() {
 	watten.Deck.Shuffle()
 	watten.Deck.Lift()
@@ -122,32 +164,23 @@ func (watten *Watten) RunRound() {
 		}
 	}
 
+	fp := watten.Players[(watten.Turn+1)%len(watten.Players)]
+	sp := watten.Players[watten.Turn]
 	// Schlag und Farbe ansagen
-	watten.Players[(watten.Turn+1)%len(watten.Players)].Stdout <- "Gewünschter Schlag ist:"
-	value := func() CardDeck.Value {
-		for {
-			response := strings.Trim(<-watten.Players[(watten.Turn+1)%len(watten.Players)].Stdin, " \t\n\r")
-			for value := CardDeck.SIX; value <= CardDeck.ASS; value++ {
-				if strings.EqualFold(value.String(), response) {
-					return value
-				}
+	value, schlagwechsel := requestSchlag(fp)
+	if schlagwechsel {
+		fmt.Println("Schlagwechsel angetragen")
+		if acceptSchlagwechsel(sp) {
+			fmt.Println("Schlagwechsel angenommen") // TODO finish
+			fp, sp = sp, fp
+			for schlagwechsel { // Damit der andere nicht versucht das zurückzutauschen
+				value, schlagwechsel = requestSchlag(fp)
 			}
-			watten.Players[(watten.Turn+1)%len(watten.Players)].Stdout <- "Auswahl nicht erkannt"
 		}
-	}()
+	}
 	watten.writeOutputAll("Gewählter Schlag ist: " + value.String())
-	watten.Players[watten.Turn].Stdout <- "Gewünschte Farbe ist:"
-	color := func() CardDeck.Color {
-		for {
-			response := strings.Trim(<-watten.Players[(watten.Turn)%len(watten.Players)].Stdin, " \t\n\r")
-			for color := CardDeck.EICHEL; color <= CardDeck.BLATT; color++ {
-				if strings.EqualFold(color.String(), response) {
-					return color
-				}
-			}
-			watten.Players[(watten.Turn+1)%len(watten.Players)].Stdout <- "Auswahl nicht erkannt"
-		}
-	}()
+	fmt.Println("Requesting Farbe")
+	color := requestFarbe(sp)
 	watten.writeOutputAll("Gewählte Farbe ist: " + color.String())
 
 	// Spielrunden

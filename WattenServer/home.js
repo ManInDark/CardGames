@@ -71,6 +71,10 @@ function translateValue(value) {
             return "K";
         case "Ass":
             return "A";
+        case "Ja":
+            return "Y";
+        case "Nein":
+            return "N";
     }
 }
 
