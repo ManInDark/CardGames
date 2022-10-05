@@ -1,5 +1,5 @@
 var removal_timeout = 1000;
-var state = "initializing";
+var state = "initializing"; // (-> selecting:value -> selecting:color) -> choosing -> playing
 var haube = "";
 socket = new WebSocket("ws" + location.protocol.replace("http", "") + "//" + location.host + "/socket");
 socket.onerror = error => { console.log("Socket Error: ", error); }
@@ -14,10 +14,16 @@ socket.onmessage = message => {
         split = message.data.replace("[", "").replace("]", "").split(" ");
         document.getElementById("cards").append(createCard(split[1].trim(), split[0].trim()));
     }
-    else if (state === "initializing" && message.data == "Die Runde hat begonnen") { state = "choosing"; list(); haube = ""; }
+    else if (state === "initializing" && message.data === "Die Runde hat begonnen") { state = "choosing"; list(); haube = ""; }
     else if (state === "choosing" && message.data.startsWith("Gewünschte")) {
         state = "selecting:" + (message.data.split(" ")[1] === "Schlag" ? "value" : "color");
+        if (message.data.split(" ")[1] === "Schlag" && !message.data.includes("Kein")) { document.getElementById("cards").append(createCard("Schlagwechsel", "Schlagwechsel")) }
         createLog("Wähle " + message.data.split(" ")[1] + " aus!");
+    } else if (state === "choosing" && message.data === "Schlagwechsel annehmen?") { 
+        document.getElementById("cards").append(createCard("Ja", "Ja"));
+        document.getElementById("cards").append(createCard("Nein", "Nein"));
+        createLog(message.data);
+        state = "selecting:value";
     }
     else if (state === "choosing" && message.data === "Zu legende Karte:") { state = "playing"; createLog("Du bist dran!") }
     else if (message.data.startsWith("Gewählte")) {
@@ -72,9 +78,11 @@ function translateValue(value) {
         case "Ass":
             return "A";
         case "Ja":
-            return "Y";
+            return "✓";
         case "Nein":
-            return "N";
+            return "✗";
+        case "Schlagwechsel":
+            return "🗘";
     }
 }
 
@@ -84,7 +92,7 @@ class GameCard extends HTMLElement {
     }
 
     connectedCallback() {
-        this.addEventListener("click", clickHandler)
+        this.addEventListener("click", clickHandler);
         const svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         svgElement.setAttribute("version", "1.0");
         svgElement.setAttribute("width", "100px");
@@ -124,14 +132,16 @@ class GameCard extends HTMLElement {
 
         svgElement.appendChild(value);
 
-        const color = document.createElementNS("http://www.w3.org/2000/svg", "image");
-        color.setAttribute("x", "10");
-        color.setAttribute("y", "10");
-        color.setAttribute("width", "80");
-        color.setAttribute("height", "80");
-        // color.setAttribute("preserveAspectRatio", "meet");
-        color.setAttribute("href", this.getAttribute("color").toLowerCase() + ".svg");
-        svgElement.appendChild(color);
+        if (!["Ja", "Nein", "Schlagwechsel"].includes(this.getAttribute("color"))) {
+            const color = document.createElementNS("http://www.w3.org/2000/svg", "image");
+            color.setAttribute("x", "10");
+            color.setAttribute("y", "10");
+            color.setAttribute("width", "80");
+            color.setAttribute("height", "80");
+            // color.setAttribute("preserveAspectRatio", "meet");
+            color.setAttribute("href", this.getAttribute("color").toLowerCase() + ".svg");
+            svgElement.appendChild(color);
+        }
     }
 }
 
@@ -145,7 +155,7 @@ function createCard(value, color) {
 }
 
 function clickHandler() {
-    if (state.startsWith("selecting")) { removeLastLog(); send(this.getAttribute(state.split(":")[1])); state = "choosing"; }
+    if (state.startsWith("selecting")) { removeLastLog(); send(this.getAttribute(state.split(":")[1])); Array.from(document.getElementById("cards").children).forEach(element => element.remove()); state = "choosing"; }
     if (state === "playing") {
         for (i = 0; i < this.parentElement.childElementCount; i++) {
             if (this.parentElement.children[i] === this) {

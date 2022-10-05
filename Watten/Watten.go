@@ -94,8 +94,12 @@ func findWinner(cards []CardDeck.Card, haube CardDeck.Card) int {
 	return temp_card.n
 }
 
-func requestSchlag(player *CardDeck.Player) (CardDeck.Value, bool) {
-	player.Stdout <- "Gewünschter Schlag ist:"
+func requestSchlag(player *CardDeck.Player, sw_possible bool) (CardDeck.Value, bool) {
+	if sw_possible {
+		player.Stdout <- "Gewünschter Schlag ist:"
+	} else {
+		player.Stdout <- "Gewünschter Schlag ist: (Kein Schlagwechsel möglich)"
+	}
 	for {
 		response := strings.Trim(<-player.Stdin, " \t\n\r")
 		if strings.EqualFold(response, "Schlagwechsel") {
@@ -167,19 +171,16 @@ func (watten *Watten) RunRound() {
 	fp := watten.Players[(watten.Turn+1)%len(watten.Players)]
 	sp := watten.Players[watten.Turn]
 	// Schlag und Farbe ansagen
-	value, schlagwechsel := requestSchlag(fp)
+	value, schlagwechsel := requestSchlag(fp, true)
 	if schlagwechsel {
-		fmt.Println("Schlagwechsel angetragen")
 		if acceptSchlagwechsel(sp) {
-			fmt.Println("Schlagwechsel angenommen") // TODO finish
 			fp, sp = sp, fp
 		}
 		for schlagwechsel { // Damit der andere nicht versucht das zurückzutauschen
-			value, schlagwechsel = requestSchlag(fp)
+			value, schlagwechsel = requestSchlag(fp, false)
 		}
 	}
 	watten.writeOutputAll("Gewählter Schlag ist: " + value.String())
-	fmt.Println("Requesting Farbe")
 	color := requestFarbe(sp)
 	watten.writeOutputAll("Gewählte Farbe ist: " + color.String())
 
