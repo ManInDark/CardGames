@@ -173,9 +173,9 @@ func (watten *Watten) RunRound() {
 		if acceptSchlagwechsel(sp) {
 			fmt.Println("Schlagwechsel angenommen") // TODO finish
 			fp, sp = sp, fp
-			for schlagwechsel { // Damit der andere nicht versucht das zurückzutauschen
-				value, schlagwechsel = requestSchlag(fp)
-			}
+		}
+		for schlagwechsel { // Damit der andere nicht versucht das zurückzutauschen
+			value, schlagwechsel = requestSchlag(fp)
 		}
 	}
 	watten.writeOutputAll("Gewählter Schlag ist: " + value.String())
