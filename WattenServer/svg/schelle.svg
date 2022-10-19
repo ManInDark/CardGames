@@ -1,7 +1,7 @@
 <?xml version="1.0" standalone="no"?>
 <!-- source: https://en.wikipedia.org/wiki/File:Bay_schellen.svg -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
-<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="66px" height="72px" preserveAspectRatio="xMidYMid meet">
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 66 72" preserveAspectRatio="xMidYMid meet">
     <circle style="stroke:black;fill:#007F00;" cx="33" cy="65" r="5" />
     <path style="stroke:black;" d="M33 65 L33 70" />
     <path style="stroke:black;" d="M35 65 L35 69" />
