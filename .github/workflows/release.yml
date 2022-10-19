@@ -25,6 +25,8 @@ jobs:
         run: /opt/hostedtoolcache/go/1.19.1/x64/bin/go build -o WattenServer/bin/WattenServer ./WattenServer
       - name: Build for Windows
         run: GOOS=windows GOARCH=amd64 /opt/hostedtoolcache/go/1.19.1/x64/bin/go build -o WattenServer/bin/WattenServer.exe ./WattenServer
+      - name: Build for MacOS
+        run: GOOS=darwin GOARCH=amd64 /opt/hostedtoolcache/go/1.19.1/x64/bin/go build -o WattenServer/bin/Wattenserver.app ./WattenServer
       - name: ZIP Files
         run: |
           cd WattenServer

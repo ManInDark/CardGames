@@ -12,7 +12,10 @@ build_WattenServer_Linux:
 build_WattenServer_Windows:
 	GOOS=windows GOARCH=amd64 go build -o WattenServer/bin/WattenServer.exe ./WattenServer
 
-build_all: build_WattenServer_Linux build_WattenServer_Windows
+build_WattenServer_MacOS:
+	GOOS=darwin GOARCH=amd64 go build -o WattenServer/bin/WattenServer.app ./WattenServer
+
+build_all: build_WattenServer_Linux build_WattenServer_Windows build_WattenServer_MacOS
 
 zip_program: build_all
 	- rm WattenServer/watten.zip
