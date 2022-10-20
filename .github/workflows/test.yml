@@ -10,28 +10,28 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - run: /opt/hostedtoolcache/go/1.19.1/x64/bin/go test ./CardDeck -cover -v
+      - run: /opt/hostedtoolcache/go/1.19.*/x64/bin/go test ./CardDeck -cover -v
   Test_Watten_Ubuntu:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - run: /opt/hostedtoolcache/go/1.19.1/x64/bin/go test ./Watten -cover -v
+      - run: /opt/hostedtoolcache/go/1.19.*/x64/bin/go test ./Watten -cover -v
   Test_WattenServer_Build_Ubuntu:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - run: cd WattenServer; /opt/hostedtoolcache/go/1.19.1/x64/bin/go build
+      - run: cd WattenServer; /opt/hostedtoolcache/go/1.19.*/x64/bin/go build
   Test_WattenServer_Build_For_Windows:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - run: cd WattenServer; GOOS=windows GOARCH=amd64 /opt/hostedtoolcache/go/1.19.1/x64/bin/go build
+      - run: cd WattenServer; GOOS=windows GOARCH=amd64 /opt/hostedtoolcache/go/1.19.*/x64/bin/go build
   Test_WattenServer_Build_For_MacOS:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - run: cd WattenServer; GOOS=darwin GOARCH=amd64 /opt/hostedtoolcache/go/1.19.1/x64/bin/go build
+      - run: cd WattenServer; GOOS=darwin GOARCH=amd64 /opt/hostedtoolcache/go/1.19.*/x64/bin/go build
