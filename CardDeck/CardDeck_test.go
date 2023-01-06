@@ -105,10 +105,10 @@ func TestDeckCreate(t *testing.T) {
 }
 
 func TestDeckLift(t *testing.T) {
-	deck := CreateDeck(SIX, SEVEN, EIGHT, NINE, TEN, UNTER, OBER)
+	deck := CreateDeck(SIX, SEVEN, EIGHT, NINE, UNTER, OBER, KÖNIG)
 	deck.Lift(2)
-	compare_deck := []Card{{HERZ, KÖNIG}, {BLATT, KÖNIG}, {EICHEL, ASS}, {SCHELLE, ASS},
-		{HERZ, ASS}, {BLATT, ASS}, {EICHEL, KÖNIG}, {SCHELLE, KÖNIG}}
+	compare_deck := []Card{{BLATT, TEN}, {EICHEL, TEN}, {SCHELLE, ASS}, {HERZ, ASS},
+		{BLATT, ASS}, {EICHEL, ASS}, {SCHELLE, TEN}, {HERZ, TEN}}
 	for n, card := range deck.cards {
 		if card != compare_deck[n] {
 			t.Fatal("Deck Lift not working")
@@ -118,21 +118,21 @@ func TestDeckLift(t *testing.T) {
 
 func TestDeckPeek(t *testing.T) {
 	deck := CreateDeck(SIX, SEVEN, EIGHT, NINE, TEN, UNTER, OBER, KÖNIG)
-	if !(deck.Peek(-1) == Card{BLATT, ASS}) {
+	if !(deck.Peek(-1) == Card{EICHEL, ASS}) {
 		t.Fatal("Deck Peek not working")
 	}
 }
 
 func TestDeckTake(t *testing.T) {
 	deck := CreateDeck(SIX, SEVEN, EIGHT, NINE, TEN, UNTER, OBER, KÖNIG)
-	if !(deck.Take(-1) == Card{BLATT, ASS}) {
+	if !(deck.Take(-1) == Card{EICHEL, ASS}) {
 		t.Fatal("Deck Peek not working")
 	}
 }
 
 func TestDeckString(t *testing.T) {
 	deck := CreateDeck(SIX, SEVEN, EIGHT, NINE, TEN, UNTER, OBER, KÖNIG)
-	if !(deck.String() == "[[Eichel Ass], [Schelle Ass], [Herz Ass], [Blatt Ass]]") {
+	if !(deck.String() == "[[Schelle Ass], [Herz Ass], [Blatt Ass], [Eichel Ass]]") {
 		t.Fatal("Deck String not working")
 	}
 }
