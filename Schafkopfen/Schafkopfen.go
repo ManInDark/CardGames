@@ -3,6 +3,7 @@ package Schafkopfen
 import (
 	"CardGames/CardDeck"
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
 
@@ -220,7 +221,7 @@ func (schafkopfen *Schafkopfen) RunRound() {
 		schafkopfen.writeOutputAll("Gewonnen hat: " + gelegte_karten[winner].String())
 
 		for _, card := range gelegte_karten {
-			gewinner.Punktzahl += int8(card.GetValue())
+			gewinner.Punktzahl += int8(math.Max(float64(card.GetValue()), 0))
 		}
 		beginner = beginner + winner
 	}

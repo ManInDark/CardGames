@@ -20,7 +20,3 @@ build_all: build_WattenServer_Linux build_WattenServer_Windows build_WattenServe
 zip_program: build_all
 	- rm WattenServer/watten.zip
 	cd WattenServer; zip -r watten.zip *.js *.html svg; zip -jr watten.zip bin
-
-# TODO:
-# 	- Ausgabe hinmachen sodass man sieht welcher Spieler man ist
-#	- in home.js:32 einlesen was gespielt wird und danach ne Karte erstellen, die das repräsentiert
