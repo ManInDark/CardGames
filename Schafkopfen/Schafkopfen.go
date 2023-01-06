@@ -102,12 +102,12 @@ func findWinner(cards []CardDeck.Card, spielweise Spielweise) int {
 			farbe = spielweise.farbe
 		}
 		for n, card := range cards {
-			if card.GetColor() == farbe && card.GetValue() > temp_card.card.GetValue() {
+			if card.GetColor() == farbe && (card.GetValue() > temp_card.card.GetValue() || temp_card.card.GetValue() == 0) {
 				temp_card = IntCard{n, card}
 			}
 		}
 	}
-	if temp_card.card.GetValue().String() != "" {
+	if temp_card.card.GetColor().String() != "" {
 		return temp_card.n
 	}
 
