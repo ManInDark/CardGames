@@ -11,19 +11,19 @@ type Color int8
 type Value int8
 
 const (
-	EICHEL Color = iota
-	SCHELLE
-	HERZ
-	BLATT
-	SIX   Value = 6
-	SEVEN Value = 7
-	EIGHT Value = 8
-	NINE  Value = 9
-	TEN   Value = 10
-	UNTER Value = 11
-	OBER  Value = 12
-	KÖNIG Value = 13
-	ASS   Value = 14
+	EICHEL  Color = 4
+	BLATT   Color = 3
+	HERZ    Color = 2
+	SCHELLE Color = 1
+	SIX     Value = -4
+	SEVEN   Value = -3
+	EIGHT   Value = -2
+	NINE    Value = -1
+	UNTER   Value = 2
+	OBER    Value = 3
+	KÖNIG   Value = 4
+	TEN     Value = 10
+	ASS     Value = 11
 )
 
 func (color Color) String() string {
@@ -97,14 +97,15 @@ func ListToString(cards []Card) string {
 }
 
 type Player struct {
-	cards  []Card
-	name   string
-	Stdout chan string
-	Stdin  chan string
+	cards     []Card
+	name      string
+	Stdout    chan string
+	Stdin     chan string
+	Punktzahl int8
 }
 
 func CreatePlayer(name string) Player {
-	return Player{[]Card{}, name, make(chan string), make(chan string)}
+	return Player{[]Card{}, name, make(chan string), make(chan string), 0}
 }
 
 func (player Player) String() string {
@@ -132,9 +133,10 @@ type Deck struct {
 
 func CreateDeck(ignored_values ...Value) Deck {
 	deck := Deck{[]Card{}}
+	accepteable_values := []Value{SIX, SEVEN, EIGHT, NINE, UNTER, OBER, KÖNIG, TEN, ASS}
 	for value := SIX; value <= ASS; value++ {
-		if !(slices.Contains(ignored_values, value)) {
-			for color := EICHEL; color <= BLATT; color++ {
+		if !(slices.Contains(ignored_values, value)) && slices.Contains(accepteable_values, value) {
+			for color := SCHELLE; color <= EICHEL; color++ {
 				deck.cards = append(deck.cards, Card{color, value})
 			}
 		}
@@ -148,6 +150,7 @@ func (deck Deck) Shuffle() {
 }
 
 func (deck *Deck) Lift(given_index ...int) {
+	println(len(deck.cards) - 1)
 	index := rand.Intn(len(deck.cards) - 1)
 	if len(given_index) > 0 {
 		index = given_index[0]
